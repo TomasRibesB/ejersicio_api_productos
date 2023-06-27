@@ -1,25 +1,17 @@
 const express = require('express');
 const app = express();
+const routerProductos = require('./routes/productos');
+app.use(express.json());
 
-app.get('/', (req, res) => {
-    res.send('Hello World!');
+app.use((err, req, res, next) => {
+res.status(err.status || 500);
+res.json({error: err.message,});
 });
 
-app.get('/productos/get', (req, res) => {
-    const categoria = req.query.categoria;
-    res.send(`Lista de productos de la categoría: ${categoria}`);
-});
-
-app.post('/productos/post', (req, res) => {
-    res.send('Producto creado correctamente');
-});
-
-app.put('/productos/put', (req, res) => {
-    res.send('Producto editado correctamente');
-});
+app.use('/productos', routerProductos);
 
 const port = 3000;
 
 app.listen(port, () => {
     console.log(`Server Express.js running on port ${port}`);
-    });
+});
